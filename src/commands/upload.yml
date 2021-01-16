@@ -46,9 +46,9 @@ steps:
       name: Upload coverage to Coveralls
       command: >-
         << parameters.bin >> --verbose
-        --coverage_clover << parameters.clover-path >>
-        --json_path << parameters.json-path >>
-        --root-dir << parameters.root-dir >>
+        <<# parameters.clover-path >> --coverage_clover << parameters.clover-path >> <</ parameters.clover-path >>
+        <<# parameters.json-path >> --json_path << parameters.json-path >> <</ parameters.json-path >>
+        <<# parameters.root-dir >> --root-dir << parameters.root-dir >> <</ parameters.root-dir >>
         <<# parameters.config >> --config << parameters.config >> <</ parameters.config >>
   - store_artifacts:
       path: << parameters.clover-path >>
