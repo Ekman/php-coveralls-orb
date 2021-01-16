@@ -81,18 +81,18 @@ workflows:
           name: integration-test-job-generate_upload
           clover-path: coverage/clover.xml
           bin: vendor/bin/php-coveralls
+          root-dir: tests
           executor: default
           pre-steps:
             - run: *pcov
             - composer/install_bin
           generate-steps:
-            - run: cd tests
             - phpunit/test:
-                src-path: src
-                test-path: tests
+                src-path: tests/src
+                test-path: tests/tests
                 coverage: clover
                 coverage-path: coverage/clover.xml
-                bin: vendor/bin/phpunit
+                bin: tests/vendor/bin/phpunit
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: nekman/php-coveralls
           add-pr-comment: false

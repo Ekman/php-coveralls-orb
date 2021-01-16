@@ -37,6 +37,10 @@ parameters:
     description: Used to specify where to output a JSON that will be uploaded to Coveralls API
     type: string
     default: coverage/coveralls.json
+  root-dir:
+    description: Root directory of the project
+    type: string
+    default: .
 steps:
   - run:
       name: Upload coverage to Coveralls
@@ -44,6 +48,7 @@ steps:
         << parameters.bin >> --verbose
         --coverage_clover << parameters.clover-path >>
         --json_path << parameters.json-path >>
+        --root-dir << parameters.root-dir >>
         <<# parameters.config >> --config << parameters.config >> <</ parameters.config >>
   - store_artifacts:
       path: << parameters.clover-path >>
