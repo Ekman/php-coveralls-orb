@@ -35,8 +35,10 @@ jobs:
           test-path: tests/tests
           coverage: clover
           coverage-path: coverage/clover.xml
+          bin: tests/vendor/bin/phpunit
       - php-coveralls/upload:
           clover-path: coverage/clover.xml
+          bin: tests/vendor/bin/php-coveralls
 
 workflows:
   test-pack:
