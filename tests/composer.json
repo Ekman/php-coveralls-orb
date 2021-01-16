@@ -1,0 +1,16 @@
+{
+	"name": "nekman/php-coveralls",
+	"description": "Test",
+	"type": "project",
+	"license": "MIT",
+	"require": {
+		"php": "^7.0",
+		"phpunit/phpunit": "^9.0",
+		"php-coveralls/php-coveralls": "^2.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"Nekman\\PhpCoverallsOrb\\": "src"
+		}
+	}
+}
