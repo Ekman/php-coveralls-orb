@@ -60,7 +60,6 @@ steps:
   - << parameters.generate-steps >>
   - upload:
       bin: << parameters.root-dir >>/<< parameters.bin >>
-      clover-path: << parameters.clover-path >>
-      config: << parameters.config >>
-      json-path: << parameters.json-path >>
-      root-dir: << parameters.root-dir >>
+      clover-path: << parameters.root-dir >>/<< parameters.clover-path >>
+      config: << parameters.root-dir >>/<< parameters.config >>
+      json-path: << parameters.root-dir >>/<< parameters.json-path >>

@@ -91,7 +91,7 @@ workflows:
                 src-path: tests/src
                 test-path: tests/tests
                 coverage: clover
-                coverage-path: coverage/clover.xml
+                coverage-path: tests/coverage/clover.xml
                 bin: tests/vendor/bin/phpunit
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: nekman/php-coveralls
