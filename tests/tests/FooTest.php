@@ -5,6 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 class FooTest extends TestCase
 {
+	/** @covers Foo::foo */
 	public function testFoo()
 	{
 		$foo = new Foo();

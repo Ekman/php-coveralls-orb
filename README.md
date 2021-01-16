@@ -1,6 +1,6 @@
 # PHP Coveralls CircleCI Orb
 
-[![Build Status](https://circleci.com/gh/Ekman/php-coveralls.svg?style=svg)](https://app.circleci.com/pipelines/github/Ekman/php-coveralls)
+[![Build Status](https://circleci.com/gh/Ekman/php-coveralls-orb.svg?style=svg)](https://app.circleci.com/pipelines/github/Ekman/php-coveralls-orb)
 
 A [CircleCI orb](https://circleci.com/orbs/) for uploading a code coverage report to [Coveralls](https://coveralls.io/)
 using the official [PHP Coveralls](https://github.com/php-coveralls/php-coveralls) tool.

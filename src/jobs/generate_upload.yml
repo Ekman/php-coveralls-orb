@@ -48,13 +48,18 @@ parameters:
       This step shall generate the code coverage file. The code will be checked out and Composer dependencies has been
       installed.
     type: steps
+  root-dir:
+    description: Root directory of the project
+    type: string
+    default: .
 executor: << parameters.executor >>
 steps:
   - checkout
-  - composer/install
+  - composer/install:
+      working-dir: << parameters.root-dir >>
   - << parameters.generate-steps >>
   - upload:
-      bin: << parameters.bin >>
-      clover-path: << parameters.clover-path >>
-      config: << parameters.config >>
-      json-path: << parameters.json-path >>
+      bin: << parameters.root-dir >>/<< parameters.bin >>
+      clover-path: << parameters.root-dir >>/<< parameters.clover-path >>
+      config: << parameters.root-dir >>/<< parameters.config >>
+      json-path: << parameters.root-dir >>/<< parameters.json-path >>

@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   php-coveralls: nekman/php-coveralls@<<pipeline.parameters.dev-orb-version>>
   composer: stockfiller/composer@1
-  phpunit: phpunit/phpunit@1
+  phpunit: stockfiller/phpunit@1
   orb-tools: circleci/orb-tools@10.0
   bats: circleci/bats@1.0
   shellcheck: circleci/shellcheck@2.0
@@ -22,11 +22,23 @@ parameters:
     type: string
     default: "dev:alpha"
 
+executors:
+  default:
+    docker:
+      - image: php:7.4-alpine
+    resource_class: small
+
 jobs:
   integration-test:
-    docker:
-      - image: cimg/php:7.4
+    executor: default
     steps:
+      - run: &pcov
+          name: Install PCOV and git
+          command: |-
+            apk add --update --no-cache ${PHPIZE_DEPS} git
+            pecl install pcov-1.0.6
+            docker-php-ext-enable pcov
+      - composer/install_bin
       - checkout
       - composer/install:
           working-dir: tests
@@ -35,8 +47,10 @@ jobs:
           test-path: tests/tests
           coverage: clover
           coverage-path: coverage/clover.xml
+          bin: tests/vendor/bin/phpunit
       - php-coveralls/upload:
           clover-path: coverage/clover.xml
+          bin: tests/vendor/bin/php-coveralls
 
 workflows:
   test-pack:
@@ -63,6 +77,22 @@ workflows:
     when: << pipeline.parameters.run-integration-tests >>
     jobs:
       - integration-test
+      - php-coveralls/generate_upload:
+          name: integration-test-job-generate_upload
+          clover-path: coverage/clover.xml
+          bin: vendor/bin/php-coveralls
+          root-dir: tests
+          executor: default
+          pre-steps:
+            - run: *pcov
+            - composer/install_bin
+          generate-steps:
+            - phpunit/test:
+                src-path: tests/src
+                test-path: tests/tests
+                coverage: clover
+                coverage-path: tests/coverage/clover.xml
+                bin: tests/vendor/bin/phpunit
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: nekman/php-coveralls
           add-pr-comment: false
@@ -70,7 +100,9 @@ workflows:
           publish-version-tag: true
           ssh-fingerprints: "08:63:2c:89:06:3c:bc:ee:10:53:f9:05:37:5f:c5:48"
           context: [ orb-publishing ]
-          requires: [ integration-test ]
+          requires:
+            - integration-test
+            - integration-test-job-generate_upload
           filters:
             branches:
               only: master
