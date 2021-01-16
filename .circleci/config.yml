@@ -77,16 +77,16 @@ workflows:
     when: << pipeline.parameters.run-integration-tests >>
     jobs:
       - integration-test
-      # integration test job
       - php-coveralls/generate_upload:
+          name: integration-test-job-generate_upload
           clover-path: coverage/clover.xml
           bin: vendor/bin/php-coveralls
           executor: default
           pre-steps:
             - run: *pcov
             - composer/install_bin
-            - run: cd tests
           generate-steps:
+            - run: cd tests
             - phpunit/test:
                 src-path: src
                 test-path: tests
