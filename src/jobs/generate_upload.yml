@@ -63,3 +63,4 @@ steps:
       clover-path: << parameters.clover-path >>
       config: << parameters.config >>
       json-path: << parameters.json-path >>
+      root-dir: << parameters.root-dir >>
