@@ -76,8 +76,9 @@ workflows:
       - php-coveralls/generate_upload:
           clover-path: coverage/clover.xml
           bin: tests/vendor/bin/php-coveralls
-          docker:
-            - image: php:7.4-alpine
+          executor:
+            docker:
+              - image: php:7.4-alpine
           pre-steps:
             - run: *pcov
             - composer/install_bin
