@@ -25,8 +25,15 @@ parameters:
 jobs:
   integration-test:
     docker:
-      - image: cimg/php:7.4
+      - image: php:7.4
     steps:
+      - run:
+          name: Install PCOV
+          command: |-
+            apk add --update --no-cache ${PHPIZE_DEPS}
+            pecl install pcov-1.0.6
+            docker-php-ext-enable pcov
+      - composer/install_bin
       - checkout
       - composer/install:
           working-dir: tests
