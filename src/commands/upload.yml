@@ -1,0 +1,51 @@
+# MIT License
+#
+# Copyright (c) 2021 Niklas Ekman
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+description: Upload coverage files to Coveralls
+parameters:
+  bin:
+    description: Path to the Coveralls PHP binaries
+    type: string
+    default: vendor/bin/php-coveralls
+  clover-path:
+    description: Path to the Clover coverage files
+    type: string
+    default: coverage/clover.xml
+  config:
+    description: Path to the Coveralls configuration file
+    type: string
+    default: ""
+  json-path:
+    description: Used to specify where to output a JSON that will be uploaded to Coveralls API
+    type: string
+    default: coverage/coveralls.json
+steps:
+  - run:
+      name: Upload coverage to Coveralls
+      command: >-
+        << parameters.bin >> --verbose
+        --coverage_clover << parameters.clover-path >>
+        --json_path << parameters.json-path >>
+        <<# parameters.config >> --config << parameters.config >> <</ parameters.config >>
+  - store_artifacts:
+      path: << parameters.clover-path >>
+  - store_artifacts:
+      path: << parameters.json-path >>

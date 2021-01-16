@@ -1,0 +1,42 @@
+# MIT License
+#
+# Copyright (c) 2021 Niklas Ekman
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+description: >-
+  Run PHPUnit tests and upload code coverage as one job. This will also report PHPUnit tests to CircleCI and upload artifacts.
+  More straight forward approach but it expects an environment where Composer and PCOV/Xdebug is already installed. PHPUnit
+  is not a must and you can use your own tool to generate clover coverage file.
+usage:
+  version: 2.1
+  orbs:
+    php-coveralls: nekman/php-coveralls@1
+    composer: stockfiller/composer@2
+    phpunit: stockfiller/phpunit@1
+  workflows:
+    foo:
+      jobs:
+        - php-coveralls/generate_upload:
+            clover-path: coverage/clover.xml
+            generate-steps:
+              - phpunit/test:
+                  test-path: tests
+                  src-path: src
+                  coverage: clover
+                  coverage-path: coverage/clover.xml
