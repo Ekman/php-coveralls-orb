@@ -96,7 +96,9 @@ workflows:
           publish-version-tag: true
           ssh-fingerprints: "08:63:2c:89:06:3c:bc:ee:10:53:f9:05:37:5f:c5:48"
           context: [ orb-publishing ]
-          requires: [ integration-test ]
+          requires:
+            - integration-test
+            - php-coveralls/generate_upload
           filters:
             branches:
               only: master
