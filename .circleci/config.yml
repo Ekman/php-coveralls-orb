@@ -22,10 +22,15 @@ parameters:
     type: string
     default: "dev:alpha"
 
-jobs:
-  integration-test:
+executors:
+  default:
     docker:
       - image: php:7.4-alpine
+    resource_class: small
+
+jobs:
+  integration-test:
+    executor: default
     steps:
       - run: &pcov
           name: Install PCOV and git
@@ -76,9 +81,7 @@ workflows:
       - php-coveralls/generate_upload:
           clover-path: coverage/clover.xml
           bin: tests/vendor/bin/php-coveralls
-          executor:
-            docker:
-              - image: php:7.4-alpine
+          executor: default
           pre-steps:
             - run: *pcov
             - composer/install_bin
