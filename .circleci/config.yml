@@ -102,7 +102,7 @@ workflows:
           context: [ orb-publishing ]
           requires:
             - integration-test
-            - php-coveralls/generate_upload
+            - integration-test-job-generate_upload
           filters:
             branches:
               only: master
