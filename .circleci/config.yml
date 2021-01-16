@@ -27,10 +27,10 @@ jobs:
     docker:
       - image: php:7.4-alpine
     steps:
-      - run:
-          name: Install PCOV
+      - run: &pcov
+          name: Install PCOV and git
           command: |-
-            apk add --update --no-cache ${PHPIZE_DEPS}
+            apk add --update --no-cache ${PHPIZE_DEPS} git
             pecl install pcov-1.0.6
             docker-php-ext-enable pcov
       - composer/install_bin
@@ -72,6 +72,22 @@ workflows:
     when: << pipeline.parameters.run-integration-tests >>
     jobs:
       - integration-test
+      # integration test job
+      - php-coveralls/generate_upload:
+          clover-path: coverage/clover.xml
+          bin: tests/vendor/bin/php-coveralls
+          docker:
+            - image: php:7.4-alpine
+          pre-steps:
+            - run: *pcov
+            - composer/install_bin
+          generate-steps:
+            - phpunit/test:
+                src-path: tests/src
+                test-path: tests/tests
+                coverage: clover
+                coverage-path: coverage/clover.xml
+                bin: tests/vendor/bin/phpunit
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: nekman/php-coveralls
           add-pr-comment: false
